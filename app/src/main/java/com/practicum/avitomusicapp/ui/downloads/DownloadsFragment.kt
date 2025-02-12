@@ -1,4 +1,4 @@
-package com.practicum.avitomusicapp.ui.dashboard
+package com.practicum.avitomusicapp.ui.downloads
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.practicum.avitomusicapp.databinding.FragmentDashboardBinding
+import com.practicum.avitomusicapp.databinding.FragmentDownloadsBinding
 
-class DashboardFragment : Fragment() {
+class DownloadsFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentDownloadsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+        val downloadsViewModel =
+            ViewModelProvider(this).get(DownloadsViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentDownloadsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textHome
+        downloadsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
