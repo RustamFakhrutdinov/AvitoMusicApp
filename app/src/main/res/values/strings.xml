@@ -2,4 +2,6 @@
     <string name="app_name">AvitoMusicApp</string>
     <string name="title_download">Downloads</string>
     <string name="title_search">Search</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="nothing_found">Nothing found</string>
 </resources>
