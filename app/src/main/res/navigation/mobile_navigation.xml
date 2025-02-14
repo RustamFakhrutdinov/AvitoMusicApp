@@ -7,14 +7,31 @@
 
     <fragment
         android:id="@+id/navigation_downloads"
-        android:name="com.practicum.avitomusicapp.ui.downloads.DownloadsFragment"
+        android:name="com..avitomusicapp.ui.downloads.DownloadsFragment"
         android:label="@string/title_download"
-        tools:layout="@layout/fragment_downloads" />
+        tools:layout="@layout/fragment_downloads" >
+        <action
+            android:id="@+id/action_navigation_downloads_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.practicum.avitomusicapp.ui.search.SearchFragment"
+        android:name="com..avitomusicapp.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com..avitomusicapp.ui.player.PlayerFragment"
+        android:label="fragment_player"
+        tools:layout="@layout/fragment_player">
+        <argument
+            android:name="track"
+            app:argType="com..playlistmaker.search.domain.models.Track" />
+    </fragment>
 
 </navigation>
