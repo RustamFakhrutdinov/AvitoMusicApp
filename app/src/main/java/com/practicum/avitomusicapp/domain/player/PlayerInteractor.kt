@@ -9,6 +9,8 @@ interface PlayerInteractor {
 
     fun getTime(): String
 
+    fun getCurrentPosition(): Int
+
     fun play()
 
     fun pause()
@@ -20,4 +22,6 @@ interface PlayerInteractor {
     fun getDuration(): String
 
     fun convertFromJsonToList(json: String): ArrayList<Track>
+
+    fun seekTo(progress: Int)
 }

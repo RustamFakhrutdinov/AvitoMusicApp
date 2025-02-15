@@ -26,11 +26,12 @@
             style="@style/TrackName"
             android:ellipsize="end"
             android:singleLine="true"
+            android:gravity="center_vertical"
             tools:text="Названиеdfgfgdgdfgdfghfsdhfguygyyqwe" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/layout_performer_name_height"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="1dp">
 

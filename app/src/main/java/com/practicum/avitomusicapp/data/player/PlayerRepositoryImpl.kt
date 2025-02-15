@@ -33,6 +33,10 @@ class PlayerRepositoryImpl(
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
     }
 
+    override fun getCurrentPosition(): Int {
+        return mediaPlayer.currentPosition
+    }
+
     override fun release() {
         if (mediaPlayer != null) {
             mediaPlayer.release()
@@ -63,6 +67,10 @@ class PlayerRepositoryImpl(
         val itemType = object : TypeToken<List<Track>>() {}.type
 
         return Gson().fromJson(json, itemType)
+    }
+
+    override fun seekTo(progress: Int) {
+        mediaPlayer.seekTo(progress)
     }
 
 

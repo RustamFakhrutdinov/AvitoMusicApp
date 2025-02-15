@@ -9,6 +9,8 @@ interface PlayerRepository {
 
     fun getTime(): String
 
+    fun getCurrentPosition(): Int
+
     fun release()
 
     fun play()
@@ -20,4 +22,6 @@ interface PlayerRepository {
     fun getDuration(): String
 
     fun convertFromJsonToList(json: String): ArrayList<Track>
+
+    fun seekTo(progress: Int)
 }

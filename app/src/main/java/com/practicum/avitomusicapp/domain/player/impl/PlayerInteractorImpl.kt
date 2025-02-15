@@ -17,6 +17,10 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
         return repository.getTime()
     }
 
+    override fun getCurrentPosition(): Int {
+        return repository.getCurrentPosition()
+    }
+
     override fun play() {
         repository.play()
     }
@@ -39,5 +43,9 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
 
     override fun convertFromJsonToList(json: String): ArrayList<Track> {
         return repository.convertFromJsonToList(json)
+    }
+
+    override fun seekTo(progress: Int) {
+        repository.seekTo(progress)
     }
 }

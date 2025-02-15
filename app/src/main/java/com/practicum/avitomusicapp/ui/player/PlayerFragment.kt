@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.Group
@@ -29,10 +30,13 @@ import com.practicum.avitomusicapp.databinding.FragmentPlayerBinding
 import com.practicum.avitomusicapp.domain.models.Track
 import com.practicum.avitomusicapp.ui.player.state.PlayStatus
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val TRACK_PREVIEW_DURATION = 30000
     }
 
     private var _binding: FragmentPlayerBinding? = null
@@ -44,6 +48,7 @@ class PlayerFragment : Fragment() {
     private lateinit var trackTime: TextView
     private lateinit var playButton: ImageButton
     private lateinit var albumTitle: TextView
+    private lateinit var seekBar: SeekBar
 
     private lateinit var track: Track
 
@@ -62,16 +67,21 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.preparePlayerScreen(args.track)
-        viewModel.jsonToList(args.trackList?:"")
+        viewModel.jsonToList(args.trackList ?: "")
 
         initializeViews()
 
         viewModel.getPlayStatusLiveData().observe(viewLifecycleOwner) { playStatus ->
             playButtonChange(playStatus)
-            trackTime.text = playStatus.progress
+          //  trackTime.text = playStatus.progress
         }
         viewModel.getPlayScreenLiveData().observe(viewLifecycleOwner) { track ->
-           addInformation(track)
+            addInformation(track)
+            seekBar.max = TRACK_PREVIEW_DURATION
+        }
+        viewModel.getSeekBarProgressLiveData().observe(viewLifecycleOwner) { progress ->
+            seekBar.progress = progress
+            trackTime.text = formatTime(progress)
         }
 
         playButton.setOnClickListener {
@@ -94,6 +104,27 @@ class PlayerFragment : Fragment() {
         binding.rewindButton.setOnClickListener {
             viewModel.rewindPressed()
         }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    viewModel.seekTo(progress)
+                    trackTime.text = formatTime(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                viewModel.pause()
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                viewModel.play()
+            }
+        })
+    }
+
+    private fun formatTime(progress: Int): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(progress)
     }
 
     private fun playButtonChange(playStatus: PlayStatus) {
@@ -111,6 +142,7 @@ class PlayerFragment : Fragment() {
         playButton = binding.playButton
         trackTime = binding.trackTime
         albumTitle = binding.albumName
+        seekBar = binding.seekBar
     }
 
     private fun addInformation(track: Track) {

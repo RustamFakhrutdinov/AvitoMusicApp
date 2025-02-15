@@ -14,6 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.time.Duration
 
 class PlayerViewModel(private val playerInteractor: PlayerInteractor
@@ -26,6 +29,9 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
 
     private val playScreenLiveData = MutableLiveData<Track>()
     fun getPlayScreenLiveData(): LiveData<Track> = playScreenLiveData
+
+    private val seekBarProgressLiveData = MutableLiveData<Int>()
+    fun getSeekBarProgressLiveData(): LiveData<Int> = seekBarProgressLiveData
 
     private var timerJob: Job? = null
 
@@ -45,12 +51,14 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
         timerJob = viewModelScope.launch {
             while (playerInteractor.isPlaying()) {
                 delay(300L)
+                val currentPosition = playerInteractor.getCurrentPosition()
                 playStatusLiveData.postValue(getCurrentPlayStatus().copy(progress = playerInteractor.getTime()))
+                seekBarProgressLiveData.postValue(currentPosition)
             }
             if(playerInteractor.getTime() == playerInteractor.getDuration()) {
+                seekBarProgressLiveData.postValue(timeToMilliseconds(track.duration))
                 playStatusLiveData.postValue(
                     getCurrentPlayStatus().copy(
-                        progress = duration,
                         isPlaying = false
                     )
                 )
@@ -62,7 +70,6 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
     fun pause() {
         playerInteractor.pause()
         timerJob?.cancel()
-       // timerJob?.cancel()
         playStatusLiveData.postValue(getCurrentPlayStatus().copy(isPlaying = false))
     }
 
@@ -122,6 +129,17 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
         preparePlayer(track.preview)
         playScreenLiveData.postValue(track)
         play()
+    }
+
+    fun seekTo(progress: Int) {
+        playerInteractor.seekTo(progress)
+        seekBarProgressLiveData.postValue(progress)
+    }
+
+    fun timeToMilliseconds(time: String): Int {
+        val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+        val date: Date = dateFormat.parse(time) ?: return 0 // Если парсинг не удался, вернем 0
+        return date.time.toInt()
     }
 
 }
