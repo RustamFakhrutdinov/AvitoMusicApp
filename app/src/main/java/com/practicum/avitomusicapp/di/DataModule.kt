@@ -6,7 +6,9 @@ import com.google.gson.Gson
 import com.practicum.avitomusicapp.data.NetworkClient
 import com.practicum.avitomusicapp.data.network.DeezerApi
 import com.practicum.avitomusicapp.data.network.RetrofitNetworkClient
+import com.practicum.avitomusicapp.data.player.PlayerRepositoryImpl
 import com.practicum.avitomusicapp.data.search.TracksRepositoryImpl
+import com.practicum.avitomusicapp.domain.player.PlayerRepository
 import com.practicum.avitomusicapp.domain.search.api.TracksRepository
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -40,5 +42,9 @@ val dataModule = module {
 
     single<TracksRepository> {
         TracksRepositoryImpl(get())
+    }
+
+    single <PlayerRepository>{
+        PlayerRepositoryImpl(get())
     }
 }

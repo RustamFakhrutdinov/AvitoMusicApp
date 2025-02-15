@@ -8,5 +8,6 @@ data class TrackDto(
     val duration: Int? = null,      // Продолжительность трека
     val md5_image: String? = null,      // Ссылка на изображение обложки
     val preview: String? = null,           // ссылка на отрывок трека
-    val artist: Artist? = null         // Исполнитель
+    val artist: ArtistDto? = null,         // Исполнитель
+    val album: AlbumDto? = null
 )

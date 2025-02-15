@@ -16,6 +16,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.avitomusicapp.R
 import com.practicum.avitomusicapp.databinding.FragmentSearchBinding
@@ -51,7 +53,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var isSearchButtonPressed = false
         initViews()
         val clearButton = binding.clearIcon
 
@@ -77,8 +78,8 @@ class SearchFragment : Fragment() {
         searchTextWatcher.let { inputEditText.addTextChangedListener(it) }
 
         clickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { item ->
-//            val direction: NavDirections = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(item)
-//            findNavController().navigate(direction)
+            val direction: NavDirections = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(item)
+            findNavController().navigate(direction)
         }
 
         trackAdapter.onTrackClickListener = TrackViewHolder.OnTrackClickListener { item->
