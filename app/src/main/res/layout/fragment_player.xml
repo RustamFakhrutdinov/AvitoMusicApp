@@ -102,7 +102,7 @@
             />
 
         <ImageButton
-            android:id="@+id/playlistButton"
+            android:id="@+id/rewindButton"
             android:layout_width="60dp"
             android:layout_height="51dp"
             android:layout_marginTop="120dp"
@@ -126,13 +126,13 @@
             android:layout_marginBottom="12.33dp"
             android:src="@drawable/play"
             android:background="@null"
-            app:layout_constraintStart_toEndOf="@id/playlistButton"
-            app:layout_constraintEnd_toStartOf="@id/favoritesButton"
+            app:layout_constraintStart_toEndOf="@id/rewindButton"
+            app:layout_constraintEnd_toStartOf="@id/fastForwardButton"
             app:layout_constraintTop_toBottomOf="@id/trackName"
             app:layout_constraintBottom_toTopOf="@id/trackTime"
             app:tint="@color/deezer_color" />
         <ImageButton
-            android:id="@+id/favoritesButton"
+            android:id="@+id/fastForwardButton"
             android:layout_width="60dp"
             android:layout_height="51dp"
             android:layout_marginTop="120dp"

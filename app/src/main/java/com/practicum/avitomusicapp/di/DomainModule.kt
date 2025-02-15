@@ -12,7 +12,7 @@ val domainModule = module {
         TracksInteractorImpl(get())
     }
 
-    single <PlayerInteractor>{
+    factory <PlayerInteractor>{
         PlayerInteractorImpl(get())
     }
 

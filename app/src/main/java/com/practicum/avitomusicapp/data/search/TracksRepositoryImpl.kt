@@ -1,6 +1,7 @@
 package com.practicum.avitomusicapp.data.search
 
 import android.util.Log
+import com.google.gson.Gson
 import com.practicum.avitomusicapp.data.NetworkClient
 import com.practicum.avitomusicapp.data.dto.ArtistDto
 import com.practicum.avitomusicapp.data.dto.TracksResponse
@@ -17,6 +18,7 @@ import java.util.Locale
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
+    private val json: Gson
 ) : TracksRepository {
     override fun search(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
@@ -51,5 +53,9 @@ class TracksRepositoryImpl(
                 emit(Resource.Error("Ошибка сервера"))
             }
         }
+    }
+
+    override fun trackListToJson(trackList: List<Track>): String {
+        return json.toJson(trackList)
     }
 }

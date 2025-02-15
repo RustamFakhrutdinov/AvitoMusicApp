@@ -98,6 +98,9 @@ class SearchViewModel(
         stateLiveData.postValue(state)
     }
 
+    fun trackListToJson(trackList: List<Track>): String {
+        return tracksInteractor.trackListToJson(trackList)
+    }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L

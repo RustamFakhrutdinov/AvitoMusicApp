@@ -1,5 +1,6 @@
 package com.practicum.avitomusicapp.domain.player.impl
 
+import com.practicum.avitomusicapp.domain.models.Track
 import com.practicum.avitomusicapp.domain.player.PlayerInteractor
 import com.practicum.avitomusicapp.domain.player.PlayerRepository
 
@@ -26,5 +27,17 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
 
     override fun release() {
         repository.release()
+    }
+
+    override fun reset() {
+        repository.reset()
+    }
+
+    override fun getDuration(): String {
+       return repository.getDuration()
+    }
+
+    override fun convertFromJsonToList(json: String): ArrayList<Track> {
+        return repository.convertFromJsonToList(json)
     }
 }

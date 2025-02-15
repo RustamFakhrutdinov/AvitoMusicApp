@@ -61,15 +61,17 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        track = args.track
-        viewModel.preparePlayer(track.preview)
+        viewModel.preparePlayerScreen(args.track)
+        viewModel.jsonToList(args.trackList?:"")
 
         initializeViews()
-        addInformation()
 
         viewModel.getPlayStatusLiveData().observe(viewLifecycleOwner) { playStatus ->
             playButtonChange(playStatus)
             trackTime.text = playStatus.progress
+        }
+        viewModel.getPlayScreenLiveData().observe(viewLifecycleOwner) { track ->
+           addInformation(track)
         }
 
         playButton.setOnClickListener {
@@ -77,7 +79,7 @@ class PlayerFragment : Fragment() {
             if (currentPlayStatus?.isPlaying == true) {
                 viewModel.pause()
             } else {
-                viewModel.play(track.duration)
+                viewModel.play()
             }
         }
 
@@ -85,6 +87,13 @@ class PlayerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.fastForwardButton.setOnClickListener {
+            viewModel.fastForwardPressed()
+        }
+
+        binding.rewindButton.setOnClickListener {
+            viewModel.rewindPressed()
+        }
     }
 
     private fun playButtonChange(playStatus: PlayStatus) {
@@ -104,10 +113,10 @@ class PlayerFragment : Fragment() {
         albumTitle = binding.albumName
     }
 
-    private fun addInformation() {
+    private fun addInformation(track: Track) {
         trackTitle.text = track.title
         trackPerformer.text = track.artist.name
-        trackTime.text = track.duration
+        trackTime.text = "00:00"
         if (track.album.title != null) {
             albumTitle.text = track.album.title
         } else {

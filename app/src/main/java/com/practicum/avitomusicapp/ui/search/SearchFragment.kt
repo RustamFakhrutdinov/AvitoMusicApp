@@ -46,7 +46,11 @@ class SearchFragment : Fragment() {
 
     private lateinit var clickDebounce: (Track) -> Unit
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -77,12 +81,20 @@ class SearchFragment : Fragment() {
         }
         searchTextWatcher.let { inputEditText.addTextChangedListener(it) }
 
-        clickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { item ->
-            val direction: NavDirections = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(item)
+        clickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { item ->
+            val direction: NavDirections =
+                SearchFragmentDirections.actionSearchFragmentToPlayerFragment(
+                    item,
+                    viewModel.trackListToJson(tracksList)
+                )
             findNavController().navigate(direction)
         }
 
-        trackAdapter.onTrackClickListener = TrackViewHolder.OnTrackClickListener { item->
+        trackAdapter.onTrackClickListener = TrackViewHolder.OnTrackClickListener { item ->
             clickDebounce(item)
         }
 

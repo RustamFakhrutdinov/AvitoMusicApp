@@ -1,6 +1,9 @@
 package com.practicum.avitomusicapp.data.player
 
 import android.media.MediaPlayer
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.practicum.avitomusicapp.domain.models.Track
 import com.practicum.avitomusicapp.domain.player.PlayerRepository
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -36,6 +39,15 @@ class PlayerRepositoryImpl(
         }
     }
 
+    override fun reset() {
+        mediaPlayer.reset()
+    }
+
+    override fun getDuration(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.duration)
+    }
+
+
     override fun play() {
         mediaPlayer.apply {
             start()
@@ -45,5 +57,13 @@ class PlayerRepositoryImpl(
     override fun pause() {
         mediaPlayer.pause()
     }
+
+    override fun convertFromJsonToList(json: String):ArrayList<Track> {
+
+        val itemType = object : TypeToken<List<Track>>() {}.type
+
+        return Gson().fromJson(json, itemType)
+    }
+
 
 }

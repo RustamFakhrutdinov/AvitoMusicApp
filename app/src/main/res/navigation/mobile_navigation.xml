@@ -32,6 +32,10 @@
         <argument
             android:name="track"
             app:argType="com.practicum.avitomusicapp.domain.models.Track" />
+        <argument
+            android:name="trackList"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
 </navigation>

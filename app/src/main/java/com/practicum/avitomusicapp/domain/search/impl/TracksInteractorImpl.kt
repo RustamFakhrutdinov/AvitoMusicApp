@@ -20,4 +20,8 @@ class TracksInteractorImpl(private val repository: TracksRepository): TracksInte
             }
         }
     }
+
+    override fun trackListToJson(trackList: List<Track>): String {
+        return repository.trackListToJson(trackList)
+    }
 }

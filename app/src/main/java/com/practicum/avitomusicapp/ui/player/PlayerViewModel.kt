@@ -16,25 +16,29 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
-class PlayerViewModel(private val playerInteractor: PlayerInteractor,
-                      private val context: Context
+class PlayerViewModel(private val playerInteractor: PlayerInteractor
 ) : ViewModel() {
+    private lateinit var track: Track
+    private val tracksList = arrayListOf<Track>()
+
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
     fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
 
-    private var timerJob: Job? = null
+    private val playScreenLiveData = MutableLiveData<Track>()
+    fun getPlayScreenLiveData(): LiveData<Track> = playScreenLiveData
 
-    private lateinit var clickDebounce: (Track) -> Unit
+    private var timerJob: Job? = null
 
     override fun onCleared() {
         super.onCleared()
         release()
     }
 
-    fun play(duration: String) {
+
+    fun play() {
         playerInteractor.play()
         playStatusLiveData.value = getCurrentPlayStatus().copy(isPlaying = true)
-        startTimer(duration)
+        startTimer(track.duration)
     }
 
     private fun startTimer(duration: String) {
@@ -43,12 +47,14 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor,
                 delay(300L)
                 playStatusLiveData.postValue(getCurrentPlayStatus().copy(progress = playerInteractor.getTime()))
             }
-            playStatusLiveData.postValue(
-                getCurrentPlayStatus().copy(
-                    progress = duration,
-                    isPlaying = false
+            if(playerInteractor.getTime() == playerInteractor.getDuration()) {
+                playStatusLiveData.postValue(
+                    getCurrentPlayStatus().copy(
+                        progress = duration,
+                        isPlaying = false
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -56,6 +62,7 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor,
     fun pause() {
         playerInteractor.pause()
         timerJob?.cancel()
+       // timerJob?.cancel()
         playStatusLiveData.postValue(getCurrentPlayStatus().copy(isPlaying = false))
     }
 
@@ -63,7 +70,6 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor,
         return playStatusLiveData.value ?: PlayStatus(
             progress = "00:00",
             isPlaying = false,
-            isFavourite = false
         )
     }
 
@@ -71,8 +77,51 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor,
         playerInteractor.release()
     }
 
-    fun preparePlayer(url: String) {
+    private fun reset() {
+        playerInteractor.reset()
+    }
+
+    private fun preparePlayer(url: String) {
         playerInteractor.preparePlayer(url)
+    }
+
+    fun jsonToList(json: String) {
+        tracksList.addAll(playerInteractor.convertFromJsonToList(json))
+    }
+
+    fun fastForwardPressed() {
+        reset()
+        val trackIndex = tracksList.indexOf(track)
+        if (trackIndex >= tracksList.lastIndex) {
+            track = tracksList[0]
+            playScreenLiveData.postValue(track)
+        } else {
+            track = tracksList[trackIndex+1]
+            playScreenLiveData.postValue(track)
+        }
+        preparePlayer(track.preview)
+        play()
+    }
+
+    fun rewindPressed() {
+        reset()
+        val trackIndex = tracksList.indexOf(track)
+        if (trackIndex <= 0) {
+            track = tracksList[tracksList.lastIndex]
+            playScreenLiveData.postValue(track)
+        } else {
+            track = tracksList[trackIndex-1]
+            playScreenLiveData.postValue(track)
+        }
+        preparePlayer(track.preview)
+        play()
+    }
+
+    fun preparePlayerScreen(trackFromSearch: Track) {
+        track = trackFromSearch
+        preparePlayer(track.preview)
+        playScreenLiveData.postValue(track)
+        play()
     }
 
 }

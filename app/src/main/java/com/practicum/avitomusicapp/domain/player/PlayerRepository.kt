@@ -1,5 +1,7 @@
 package com.practicum.avitomusicapp.domain.player
 
+import com.practicum.avitomusicapp.domain.models.Track
+
 interface PlayerRepository {
     fun isPlaying(): Boolean
 
@@ -12,4 +14,10 @@ interface PlayerRepository {
     fun play()
 
     fun pause()
+
+    fun reset()
+
+    fun getDuration(): String
+
+    fun convertFromJsonToList(json: String): ArrayList<Track>
 }

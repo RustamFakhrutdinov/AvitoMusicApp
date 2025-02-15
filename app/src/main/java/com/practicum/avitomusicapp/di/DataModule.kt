@@ -41,10 +41,10 @@ val dataModule = module {
     }
 
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(get(),get())
     }
 
-    single <PlayerRepository>{
+    factory <PlayerRepository>{
         PlayerRepositoryImpl(get())
     }
 }
