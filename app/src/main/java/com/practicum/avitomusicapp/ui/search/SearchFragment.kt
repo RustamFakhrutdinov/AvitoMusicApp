@@ -16,6 +16,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.avitomusicapp.R
 import com.practicum.avitomusicapp.databinding.FragmentSearchBinding
@@ -44,14 +46,17 @@ class SearchFragment : Fragment() {
 
     private lateinit var clickDebounce: (Track) -> Unit
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var isSearchButtonPressed = false
         initViews()
         val clearButton = binding.clearIcon
 
@@ -76,12 +81,20 @@ class SearchFragment : Fragment() {
         }
         searchTextWatcher.let { inputEditText.addTextChangedListener(it) }
 
-        clickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { item ->
-//            val direction: NavDirections = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(item)
-//            findNavController().navigate(direction)
+        clickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { item ->
+            val direction: NavDirections =
+                SearchFragmentDirections.actionSearchFragmentToPlayerFragment(
+                    item,
+                    viewModel.trackListToJson(tracksList)
+                )
+            findNavController().navigate(direction)
         }
 
-        trackAdapter.onTrackClickListener = TrackViewHolder.OnTrackClickListener { item->
+        trackAdapter.onTrackClickListener = TrackViewHolder.OnTrackClickListener { item ->
             clickDebounce(item)
         }
 

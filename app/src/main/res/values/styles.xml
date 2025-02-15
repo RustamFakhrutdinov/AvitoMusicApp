@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="TrackCover">
         <item name="android:layout_width">@dimen/track_cover_size</item>
         <item name="android:layout_height">@dimen/track_cover_size</item>
@@ -8,7 +9,7 @@
 
     <style name="TrackName">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">19dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
@@ -85,5 +86,34 @@
         <item name="android:textSize">19sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="PlayerFragment">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="ArrowBackForPlayer">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:drawableTint">@color/black</item>
+        <item name="srcCompat">@drawable/arrow_back</item>
+        <item name="tint">@color/black</item>
+    </style>
+
+    <style name="TextPlayer">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ProgressTint">
+        <item name="android:progressTint">@color/black</item>
+    </style>
+
+    <style name="BottomNavColor">
+        <item name="android:background">@color/white</item>
     </style>
 </resources>

@@ -20,7 +20,7 @@ class TrackViewHolder (binding: TrackItemBinding): RecyclerView.ViewHolder(bindi
         val imageUrl:String = track.getCover56()
         artistName.requestLayout()
         title.text = track.title
-        artistName.text = track.artist?.name ?: "No name"
+        artistName.text = track.artist.name
         Glide.with(itemView)
             .load(imageUrl)
             .placeholder(R.drawable.image_placeholder)
