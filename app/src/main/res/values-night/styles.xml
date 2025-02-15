@@ -108,4 +108,7 @@
     <style name="ProgressTint">
         <item name="android:progressTint">@color/white</item>
     </style>
+    <style name="BottomNavColor">
+        <item name="android:background">@color/black</item>
+    </style>
 </resources>
