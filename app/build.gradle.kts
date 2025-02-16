@@ -65,5 +65,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.glide)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.peko)
 
 }

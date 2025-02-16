@@ -1,5 +1,6 @@
 package com.practicum.avitomusicapp.di
 
+import com.practicum.avitomusicapp.ui.downloads.DownloadsViewModel
 import com.practicum.avitomusicapp.ui.player.PlayerViewModel
 import com.practicum.avitomusicapp.ui.search.SearchViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -12,5 +13,9 @@ val viewModelModule = module {
 
     viewModel {
         PlayerViewModel(get())
+    }
+
+    viewModel {
+        DownloadsViewModel(get(),get())
     }
 }
