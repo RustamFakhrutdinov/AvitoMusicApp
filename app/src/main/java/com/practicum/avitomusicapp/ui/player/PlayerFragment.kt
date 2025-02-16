@@ -73,11 +73,16 @@ class PlayerFragment : Fragment() {
 
         viewModel.getPlayStatusLiveData().observe(viewLifecycleOwner) { playStatus ->
             playButtonChange(playStatus)
-          //  trackTime.text = playStatus.progress
         }
         viewModel.getPlayScreenLiveData().observe(viewLifecycleOwner) { track ->
+            if(args.isFromDownloads) {
+                val time = viewModel.timeToMilliseconds(track.duration)
+                seekBar.max = time
+            } else {
+                seekBar.max = TRACK_PREVIEW_DURATION
+            }
             addInformation(track)
-            seekBar.max = TRACK_PREVIEW_DURATION
+
         }
         viewModel.getSeekBarProgressLiveData().observe(viewLifecycleOwner) { progress ->
             seekBar.progress = progress
@@ -114,7 +119,7 @@ class PlayerFragment : Fragment() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                viewModel.pause()
+               // viewModel.pause()
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {

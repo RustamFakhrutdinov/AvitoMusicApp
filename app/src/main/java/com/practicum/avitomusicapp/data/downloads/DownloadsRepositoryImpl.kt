@@ -9,6 +9,8 @@ import com.practicum.avitomusicapp.domain.downloads.DownloadsRepository
 import com.practicum.avitomusicapp.domain.models.Album
 import com.practicum.avitomusicapp.domain.models.Artist
 import com.practicum.avitomusicapp.domain.models.Track
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DownloadsRepositoryImpl(private val context: Context): DownloadsRepository {
 
@@ -107,7 +109,10 @@ class DownloadsRepositoryImpl(private val context: Context): DownloadsRepository
                 val title = it.getString(titleColumn)
                 val artistName = it.getString(artistColumn) ?: "Unknown Artist"
                 val albumName = it.getString(albumColumn) ?: "Unknown Album"
-                val duration = it.getLong(durationColumn).toString()
+                val duration = SimpleDateFormat("mm:ss", Locale.getDefault()).format(
+                    it.getInt(durationColumn)
+                )
+                //val duration = it.getLong(durationColumn).toString()
                 val filePath = it.getString(dataColumn)
 
                 val artist = Artist(name = artistName)

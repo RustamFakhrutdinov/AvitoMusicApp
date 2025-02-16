@@ -56,10 +56,13 @@ class DownloadsFragment : Fragment() {
     private val tracksList = arrayListOf<Track>()
     private val trackAdapter = TrackAdapter(tracksList)
 
-    private val viewModel: DownloadsViewModel by viewModel() // Используйте Koin для внедрения нового ViewModel
+    private val searchViewModel: SearchViewModel by viewModel()
+    private val viewModel: DownloadsViewModel by viewModel()
     private lateinit var binding: FragmentDownloadsBinding
 
     val requester = PermissionRequester.instance()
+
+    private lateinit var clickDebounce: (Track) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -144,6 +147,24 @@ class DownloadsFragment : Fragment() {
             }
         }
 
+        clickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { item ->
+            val direction: NavDirections =
+                DownloadsFragmentDirections.actionDownloadsFragmentToPlayerFragment(
+                    item,
+                    searchViewModel.trackListToJson(tracksList),
+                    true
+                )
+            findNavController().navigate(direction)
+        }
+
+        trackAdapter.onTrackClickListener = TrackViewHolder.OnTrackClickListener { item ->
+            clickDebounce(item)
+        }
+
 
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
     }
@@ -211,6 +232,6 @@ class DownloadsFragment : Fragment() {
     companion object {
         const val TAG = "DownloadsFragment"
         const val NAME_DEF = ""
-        private const val REQUEST_CODE_OPEN_DIRECTORY = 1001
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

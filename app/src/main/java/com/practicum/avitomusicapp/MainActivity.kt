@@ -28,10 +28,10 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.downloadsFragment -> {
-
+                    binding.navView.visibility = View.VISIBLE
                 }
                 R.id.searchFragment -> {
-
+                    binding.navView.visibility = View.VISIBLE
                 }
                 R.id.playerFragment -> {
                     binding.navView.visibility = View.GONE

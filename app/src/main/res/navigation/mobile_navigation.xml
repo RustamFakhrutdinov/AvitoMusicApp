@@ -36,6 +36,9 @@
             android:name="trackList"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="isFromDownloads"
+            app:argType="boolean" />
     </fragment>
 
 </navigation>

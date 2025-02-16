@@ -19,7 +19,8 @@ import java.util.Date
 import java.util.Locale
 import kotlin.time.Duration
 
-class PlayerViewModel(private val playerInteractor: PlayerInteractor
+class PlayerViewModel(
+    private val playerInteractor: PlayerInteractor
 ) : ViewModel() {
     private lateinit var track: Track
     private val tracksList = arrayListOf<Track>()
@@ -44,10 +45,10 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
     fun play() {
         playerInteractor.play()
         playStatusLiveData.value = getCurrentPlayStatus().copy(isPlaying = true)
-        startTimer(track.duration)
+        startTimer()
     }
 
-    private fun startTimer(duration: String) {
+    private fun startTimer() {
         timerJob = viewModelScope.launch {
             while (playerInteractor.isPlaying()) {
                 delay(300L)
@@ -55,13 +56,21 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
                 playStatusLiveData.postValue(getCurrentPlayStatus().copy(progress = playerInteractor.getTime()))
                 seekBarProgressLiveData.postValue(currentPosition)
             }
-            if(playerInteractor.getTime() == playerInteractor.getDuration()) {
+            var currentTime = playerInteractor.getTime()
+            val duration = playerInteractor.getDuration()
+            if (currentTime == duration ||
+                //условие добавленно, потому что текущее время, которое возвращает медиаплеер не всегда совпадает с длительностью трека
+                (timeToMilliseconds(duration) - timeToMilliseconds(currentTime) == 1000)
+            ) {
+
+
                 seekBarProgressLiveData.postValue(timeToMilliseconds(track.duration))
                 playStatusLiveData.postValue(
                     getCurrentPlayStatus().copy(
                         isPlaying = false
                     )
                 )
+
             }
         }
     }
@@ -103,7 +112,7 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
             track = tracksList[0]
             playScreenLiveData.postValue(track)
         } else {
-            track = tracksList[trackIndex+1]
+            track = tracksList[trackIndex + 1]
             playScreenLiveData.postValue(track)
         }
         preparePlayer(track.preview)
@@ -117,7 +126,7 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
             track = tracksList[tracksList.lastIndex]
             playScreenLiveData.postValue(track)
         } else {
-            track = tracksList[trackIndex-1]
+            track = tracksList[trackIndex - 1]
             playScreenLiveData.postValue(track)
         }
         preparePlayer(track.preview)
@@ -136,10 +145,21 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor
         seekBarProgressLiveData.postValue(progress)
     }
 
+    //    fun timeToMilliseconds(time: String): Int {
+//        val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+//        val date: Date = dateFormat.parse(time) ?: return 0 // Если парсинг не удался, вернем 0
+//        return date.time.toInt()
+//    }
     fun timeToMilliseconds(time: String): Int {
-        val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
-        val date: Date = dateFormat.parse(time) ?: return 0 // Если парсинг не удался, вернем 0
-        return date.time.toInt()
+        return try {
+            val parts = time.split(":")
+            val minutes = parts[0].toIntOrNull() ?: 0
+            val seconds = parts[1].toIntOrNull() ?: 0
+            (minutes * 60 + seconds) * 1000
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
     }
 
 }
