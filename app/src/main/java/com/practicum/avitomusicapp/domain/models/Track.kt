@@ -13,6 +13,5 @@ data class Track(
     val artist: Artist,         // Исполнитель
     val album: Album
 ) : Parcelable {
-    //fun getCover512() = image_url.replaceAfterLast('/',"512x512.jpg")
     fun getCover56() = image_url.replaceAfterLast('/', "56x56.jpg")
 }

@@ -20,6 +20,7 @@ navigationFragmentKtx = "2.8.6"
 navigationFragmentKtxVersion = "2.8.3"
 navigationUiKtx = "2.8.6"
 navigationUiKtxVersion = "2.8.3"
+peko = "3.0.5"
 retrofit = "2.11.0"
 roomCompiler = "2.6.1"
 
@@ -46,6 +47,7 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+peko = { module = "com.markodevcic:peko", version.ref = "peko" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]

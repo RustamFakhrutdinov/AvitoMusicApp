@@ -4,10 +4,12 @@ import android.content.Context
 import android.media.MediaPlayer
 import com.google.gson.Gson
 import com.practicum.avitomusicapp.data.NetworkClient
+import com.practicum.avitomusicapp.data.downloads.DownloadsRepositoryImpl
 import com.practicum.avitomusicapp.data.network.DeezerApi
 import com.practicum.avitomusicapp.data.network.RetrofitNetworkClient
 import com.practicum.avitomusicapp.data.player.PlayerRepositoryImpl
 import com.practicum.avitomusicapp.data.search.TracksRepositoryImpl
+import com.practicum.avitomusicapp.domain.downloads.DownloadsRepository
 import com.practicum.avitomusicapp.domain.player.PlayerRepository
 import com.practicum.avitomusicapp.domain.search.api.TracksRepository
 import org.koin.android.ext.koin.androidApplication
@@ -46,5 +48,9 @@ val dataModule = module {
 
     factory <PlayerRepository>{
         PlayerRepositoryImpl(get())
+    }
+
+    factory <DownloadsRepository>{
+        DownloadsRepositoryImpl(androidApplication())
     }
 }

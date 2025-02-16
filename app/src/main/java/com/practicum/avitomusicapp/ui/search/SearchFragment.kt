@@ -89,7 +89,8 @@ class SearchFragment : Fragment() {
             val direction: NavDirections =
                 SearchFragmentDirections.actionSearchFragmentToPlayerFragment(
                     item,
-                    viewModel.trackListToJson(tracksList)
+                    viewModel.trackListToJson(tracksList),
+                    false
                 )
             findNavController().navigate(direction)
         }
